@@ -22,3 +22,5 @@
 # (in case you sometimes use different venv names)
 /server/venv*/  
 /server/env*/
+
+/server/.env

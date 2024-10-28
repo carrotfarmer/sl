@@ -3,16 +3,73 @@
 
 <head>
     <title>shopping list</title>
-    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <h1>Hello World!</h1>
+    <h1 style="text-align: center">shopping list</h1>
 
-    <p>response from server:</p>
-    <p id="data"></p>
+    <div style="text-align: center">
+        <input type="text" id="item" placeholder="Enter item">
+        <button id="addBtn">add item</button>
+    </div>
 </body>
 
-<script src="script.js"></script>
+<script>
+    const backendUrl = 'http://localhost:5000';
+
+    const addBtn = document.getElementById('addBtn');
+    const item = document.getElementById('item');
+
+    function createItemElement(itemValue, itemId) {
+        const listItem = document.createElement('li');
+        listItem.textContent = itemValue;
+        listItem.id = itemId;
+        document.body.appendChild(listItem);
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = 'delete';
+        listItem.appendChild(deleteBtn);
+
+        deleteBtn.addEventListener('click', async () => {
+            listItem.remove();
+
+            const requestOptions = {
+                method: 'DELETE',
+                headers: {'Content-Type': 'application/json'},
+            };
+
+            console.log('itemId:', itemId);
+            await fetch(`${backendUrl}/items/${itemId}`, requestOptions);
+
+            document.getElementById(itemId).remove();
+        });
+    }
+
+    const fetchItems = async () => {
+        const response = await fetch(`${backendUrl}/items`);
+        const items = await response.json();
+        console.log(items);
+        items['items'].forEach(item => createItemElement(item['name'], item['id']));
+    };
+
+    fetchItems();
+
+    addBtn.addEventListener('click', async () => {
+        const itemValue = item.value;
+        if (itemValue) {
+            item.value = '';
+
+            const requestOptions = {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+            };
+
+            const res = await fetch(`${backendUrl}/items?name=${itemValue}`, requestOptions);
+            const itemId = (await res.json())['id'];
+
+            createItemElement(itemValue, itemId);
+        }
+    });
+</script>
 
 </html>
