@@ -1,0 +1,24 @@
+# Ignore Python stuff in the 'server' directory
+/server/__pycache__/
+/server/*.pyc
+/server/*.pyo
+/server/*.pyd
+/server/.Python
+/server/env/
+/server/venv/
+/server/.venv/
+/server/*.egg-info/
+/server/dist/
+/server/build/
+/server/.mypy_cache/
+/server/.pytest_cache/
+/server/.coverage
+/server/coverage/
+/server/.tox/
+/server/.nox/
+/server/.DS_Store
+
+# Optional: Ignore virtual environment by directory name
+# (in case you sometimes use different venv names)
+/server/venv*/  
+/server/env*/
